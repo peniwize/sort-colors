@@ -77,10 +77,7 @@ public:
         ssize_t left = 0; // Next available space in "red" section.
         ssize_t mid = 0; // Next available space in "white" section.
         ssize_t right = nums.size() - 1; // Next available space in "blue" section.
-        while (left < nums.size()
-                && mid < nums.size()
-                && 0 <= right
-                && mid <= right) { // '<=', not '<', because indexes are next available item, not last item.
+        while (mid <= right) { // '<=', not '<', because indexes are next available item, not last item.
             switch (nums[mid]) { // Compiler can optimize to be faster than if/then/else.
                 case 0: { swap(nums[left++], nums[mid++]); break; } // Move item into red section.
                 case 1: { ++mid; break; } // Leave item in white section.
