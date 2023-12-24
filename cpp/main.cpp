@@ -65,26 +65,26 @@ public:
     }
     
     /*!
-        Sort into sections.  Red section on left, white section in center, 
-        blue section on right.  Red section starts at [0] and grows right.
-        White section immediately follows red and grows right.  Blue section
-        starts and [n-1] and grows left.
+        Sort into three sections.  Red section on left, white section in 
+        center, blue section on right.  Red section starts at [0] and 
+        grows right. White section immediately follows red and grows right.
+        Blue section starts and [n-1] and grows left.
         
         Time = O(n)
         Space = O(1)
     */
     void sortColors_partition(vector<int>& nums) {
-        if (!nums.empty()) {
-            using idx_t = decay_t<decltype(nums)>::size_type;
-            idx_t left = 0; // Next available space in "red" section.
-            idx_t mid = 0; // Next available space in "white" section.
-            idx_t right = nums.size() - 1; // Next available space in "blue" section.
-            while (mid <= right) { // '<=', not '<', because indexes are next available item, not last item.
-                switch (nums[mid]) { // Compiler can optimize to be faster than if/then/else.
-                    case 0: { swap(nums[left++], nums[mid++]); break; } // Move item into red section.
-                    case 1: { ++mid; break; } // Leave item in white section.
-                    case 2: { swap(nums[right--], nums[mid]); break; } // Move item into red section.
-                }
+        ssize_t left = 0; // Next available space in "red" section.
+        ssize_t mid = 0; // Next available space in "white" section.
+        ssize_t right = nums.size() - 1; // Next available space in "blue" section.
+        while (left < nums.size()
+                && mid < nums.size()
+                && 0 <= right
+                && mid <= right) { // '<=', not '<', because indexes are next available item, not last item.
+            switch (nums[mid]) { // Compiler can optimize to be faster than if/then/else.
+                case 0: { swap(nums[left++], nums[mid++]); break; } // Move item into red section.
+                case 1: { ++mid; break; } // Leave item in white section.
+                case 2: { swap(nums[right--], nums[mid]); break; } // Move item into red section.
             }
         }
     }
@@ -134,8 +134,64 @@ TEST_CASE("Case 1")
 
 TEST_CASE("Case 2")
 {
-    cerr << "Case 1" << '\n';
+    cerr << "Case 2" << '\n';
     vector<int> value{2,0,1};
+    auto const expected = [&]{ auto expected = value; std::sort(expected.begin(), expected.end()); return expected; }();
+    { // New scope.
+        auto const start = std::chrono::steady_clock::now();
+        Solution{}.sortColors(value);
+        CHECK(expected == value);
+        cerr << "Elapsed time: " << elapsed_time_t{start} << '\n';
+    }
+    cerr << '\n';
+}
+
+TEST_CASE("Case 3")
+{
+    cerr << "Case 3" << '\n';
+    vector<int> value{2};
+    auto const expected = [&]{ auto expected = value; std::sort(expected.begin(), expected.end()); return expected; }();
+    { // New scope.
+        auto const start = std::chrono::steady_clock::now();
+        Solution{}.sortColors(value);
+        CHECK(expected == value);
+        cerr << "Elapsed time: " << elapsed_time_t{start} << '\n';
+    }
+    cerr << '\n';
+}
+
+TEST_CASE("Case 4")
+{
+    cerr << "Case 4" << '\n';
+    vector<int> value{1};
+    auto const expected = [&]{ auto expected = value; std::sort(expected.begin(), expected.end()); return expected; }();
+    { // New scope.
+        auto const start = std::chrono::steady_clock::now();
+        Solution{}.sortColors(value);
+        CHECK(expected == value);
+        cerr << "Elapsed time: " << elapsed_time_t{start} << '\n';
+    }
+    cerr << '\n';
+}
+
+TEST_CASE("Case 5")
+{
+    cerr << "Case 5" << '\n';
+    vector<int> value{0};
+    auto const expected = [&]{ auto expected = value; std::sort(expected.begin(), expected.end()); return expected; }();
+    { // New scope.
+        auto const start = std::chrono::steady_clock::now();
+        Solution{}.sortColors(value);
+        CHECK(expected == value);
+        cerr << "Elapsed time: " << elapsed_time_t{start} << '\n';
+    }
+    cerr << '\n';
+}
+
+TEST_CASE("Case 6")
+{
+    cerr << "Case 6" << '\n';
+    vector<int> value{};
     auto const expected = [&]{ auto expected = value; std::sort(expected.begin(), expected.end()); return expected; }();
     { // New scope.
         auto const start = std::chrono::steady_clock::now();
